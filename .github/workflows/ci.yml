@@ -33,7 +33,10 @@ jobs:
         run: pnpm lint
 
       - name: Build application
-        run: pnpm build
+        run: |
+          # Skip database migration in CI by running next build directly
+          # The migration is handled by Vercel during deployment
+          pnpm exec next build
         env:
           # Mock environment variables needed for build
           AUTH_SECRET: mock-secret-for-ci-build

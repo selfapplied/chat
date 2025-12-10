@@ -54,14 +54,14 @@ jobs:
           script: |
             const deploymentUrl = '${{ steps.deploy.outputs.url }}';
             const comment = `## 🚀 Vercel Preview Deployment
-            
+
             Successfully deployed to Vercel!
-            
+
             **Preview URL:** ${deploymentUrl}
-            
+
             ---
             *This deployment was triggered by commit ${{ github.sha }}*`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
