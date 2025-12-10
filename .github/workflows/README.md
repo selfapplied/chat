@@ -11,7 +11,7 @@ Runs on every push to `main` and on all pull requests. This workflow:
 1. **Lint and Build Job**
    - Installs dependencies using pnpm
    - Runs linting checks (`pnpm lint`)
-   - Builds the application (`pnpm build`)
+   - Builds the application (`pnpm exec next build` - skips DB migration)
 
 2. **Test Job**
    - Installs dependencies using pnpm
@@ -92,6 +92,8 @@ act -j lint-and-build
 If builds fail due to missing environment variables, ensure that:
 - Mock values are provided in the CI workflow for build-time variables
 - Vercel project has all required environment variables configured
+
+**Note**: The CI workflow uses `pnpm exec next build` instead of `pnpm build` to skip database migrations during CI builds. The full build command (`pnpm build`) runs `tsx lib/db/migrate && next build`, which requires a live database connection. Vercel handles migrations during deployment with proper environment variables.
 
 ### Test Failures
 

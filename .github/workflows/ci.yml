@@ -34,8 +34,9 @@ jobs:
 
       - name: Build application
         run: |
-          # Skip database migration in CI by running next build directly
-          # The migration is handled by Vercel during deployment
+          # Use 'next build' directly instead of 'pnpm build' to skip database migration
+          # (pnpm build runs 'tsx lib/db/migrate && next build')
+          # Database migrations are handled by Vercel during deployment
           pnpm exec next build
         env:
           # Mock environment variables needed for build
