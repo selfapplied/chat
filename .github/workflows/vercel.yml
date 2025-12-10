@@ -14,6 +14,9 @@ jobs:
   deploy:
     name: Deploy to Vercel
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write  # Needed to comment on PRs
     env:
       # Determine if this is a production or preview deployment
       IS_PROD: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
