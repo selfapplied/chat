@@ -138,6 +138,8 @@ export const getAntclock = tool({
         // lgamma is the natural log of the gamma function (Γ), used to compute log(n!)
         // We use Stirling's approximation: ln(n!) ≈ (n+0.5)ln(n) - n + 0.5ln(2π)
         // This provides reasonable accuracy for n > 10, with error < 1%
+        // For n <= 10, exact computation would be better, but this approximation
+        // still gives acceptable results for our visualization purposes
         const lgamma = (x: number): number => {
           if (x <= 1) return 0;
           return (x - 0.5) * Math.log(x) - x + 0.5 * Math.log(2 * Math.PI);
@@ -189,10 +191,12 @@ export const getAntclock = tool({
         const n = Math.floor(x);
         const shellCurrent = Math.floor(Math.log10(x)) + 1;
         
-        // Simple curvature approximation
+        // Curvature oscillates with sine function, modeling periodic symmetry breaking
+        // The phase accumulation creates modulo arithmetic structure similar to digit shells
+        // This is a simplified approximation of the full AntClock dynamics for visualization
         const curvature = Math.sin(phase) * chi;
         
-        // Update position
+        // Update position with logarithmic scaling to explore digit shells
         x = x + curvature * Math.log(x + 1);
         if (x < 1) x = 1; // Keep positive
         
