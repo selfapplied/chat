@@ -1,7 +1,6 @@
 "use client";
 
 import cx from "classnames";
-import { useEffect, useState } from "react";
 
 type AntClockInfo = {
   framework: string;
@@ -370,19 +369,6 @@ export function AntClock({
 }: {
   antClockResult: AntClockResult;
 }) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   if ("error" in antClockResult) {
     return (
       <div className="rounded-2xl bg-red-50 p-4 shadow-lg dark:bg-red-950/30">

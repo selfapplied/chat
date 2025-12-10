@@ -11,7 +11,7 @@ import { z } from "zod";
 
 export const getAntclock = tool({
   description:
-    "Explore mathematical patterns using AntClock, a framework for discrete Riemann geometry. Use this tool to compute curvature clock walks, digit mirror operations, continued fractions, and explore the relationship between Pascal's triangle and the Riemann zeta function. Perfect for mathematical exploration, number theory, and understanding emergent patterns in integers.",
+    "Explore mathematical patterns using AntClock, a framework for discrete Riemann geometry that studies how numbers behave in different 'shells' (like 1-9, 10-99, 100-999). Use this tool to: (1) walk through number space seeing how patterns emerge, (2) apply digit mirror transformations that reveal symmetries, (3) compute curvature in Pascal's triangle. Perfect for mathematical exploration, number theory enthusiasts, and understanding hidden patterns in integers.",
   inputSchema: z.object({
     operation: z
       .enum([
@@ -57,9 +57,6 @@ export const getAntclock = tool({
   }),
   execute: async (input) => {
     const { operation, x0, steps, chi_feg, digit, n } = input;
-
-    // For MVP, we'll return computed results based on the mathematical formulas
-    // In a production setup, this could call a Python service or implement the algorithms in TypeScript
     
     if (operation === "info") {
       return {
@@ -138,13 +135,15 @@ export const getAntclock = tool({
         if (k < 0 || k > n) return -Infinity;
         if (k === 0 || k === n) return 0;
         
-        // Use Stirling's approximation for large numbers
+        // lgamma is the natural log of the gamma function (Γ), used to compute log(n!)
+        // We use Stirling's approximation: ln(n!) ≈ (n+0.5)ln(n) - n + 0.5ln(2π)
+        // This provides reasonable accuracy for n > 10, with error < 1%
         const lgamma = (x: number): number => {
-          // Simplified lgamma approximation
           if (x <= 1) return 0;
           return (x - 0.5) * Math.log(x) - x + 0.5 * Math.log(2 * Math.PI);
         };
         
+        // Use log identity: log(C(n,k)) = log(n!) - log(k!) - log((n-k)!)
         return lgamma(n + 1) - lgamma(k + 1) - lgamma(n - k + 1);
       };
 
