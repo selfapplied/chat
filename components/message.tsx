@@ -193,10 +193,10 @@ const PurePreviewMessage = ({
                     {state === "input-available" && (
                       <ToolInput input={part.input} />
                     )}
-                    {state === "output-available" && (
+                    {state === "output-available" && part.output && (
                       <ToolOutput
                         errorText={undefined}
-                        output={<AntClock antClockResult={part.output} />}
+                        output={<AntClock antClockResult={part.output as any} />}
                       />
                     )}
                   </ToolContent>
