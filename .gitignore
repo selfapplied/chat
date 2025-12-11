@@ -42,3 +42,11 @@ yarn-error.log*
 /playwright-report/
 /blob-report/
 /playwright/*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+antclock-service/__pycache__/
