@@ -72,7 +72,23 @@ export const getAntclock = tool({
     if (operation === "ce1_video_script") {
       const concept = ce1_concept || "overview";
       
-      const scripts: Record<string, any> = {
+      interface VideoScene {
+        scene: number;
+        duration: string;
+        narration: string;
+        visuals: string;
+        key_concept: string;
+      }
+      
+      interface VideoScript {
+        title: string;
+        duration: string;
+        scenes: VideoScene[];
+        summary: string;
+        next_steps: string;
+      }
+      
+      const scripts: Record<string, VideoScript> = {
         overview: {
           title: "Introduction to CE1: Discrete Grammar",
           duration: "3-5 minutes",
