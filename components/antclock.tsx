@@ -66,11 +66,38 @@ type CurvatureWalkResult = {
   context: string;
 };
 
+type VideoScene = {
+  scene: number;
+  duration: string;
+  narration: string;
+  visuals: string;
+  key_concept: string;
+};
+
+type CE1VideoScriptResult = {
+  operation: "ce1_video_script";
+  concept: string;
+  title: string;
+  duration: string;
+  scenes: VideoScene[];
+  summary: string;
+  next_steps: string;
+  video_format_suggestions: {
+    style: string;
+    pacing: string;
+    visuals: string;
+    audio: string;
+    accessibility: string;
+  };
+  production_notes: string;
+};
+
 type AntClockResult =
   | AntClockInfo
   | DigitMirrorResult
   | PascalCurvatureResult
   | CurvatureWalkResult
+  | CE1VideoScriptResult
   | { error: string };
 
 const ClockIcon = ({ size = 24 }: { size?: number }) => (
@@ -103,6 +130,18 @@ const MathIcon = ({ size = 24 }: { size?: number }) => (
   </svg>
 );
 
+const VideoIcon = ({ size = 24 }: { size?: number }) => (
+  <svg fill="none" height={size} viewBox="0 0 24 24" width={size}>
+    <path
+      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 function isInfoResult(result: AntClockResult): result is AntClockInfo {
   return "framework" in result;
 }
@@ -123,6 +162,12 @@ function isCurvatureWalkResult(
   result: AntClockResult
 ): result is CurvatureWalkResult {
   return "operation" in result && result.operation === "curvature_walk";
+}
+
+function isVideoScriptResult(
+  result: AntClockResult
+): result is CE1VideoScriptResult {
+  return "operation" in result && result.operation === "ce1_video_script";
 }
 
 function InfoDisplay({ data }: { data: AntClockInfo }) {
@@ -364,6 +409,141 @@ function CurvatureWalkDisplay({ data }: { data: CurvatureWalkResult }) {
   );
 }
 
+function VideoScriptDisplay({ data }: { data: CE1VideoScriptResult }) {
+  return (
+    <div className="space-y-4">
+      <div className="rounded-lg bg-gradient-to-r from-purple-100 to-pink-100 p-4 dark:from-purple-950/50 dark:to-pink-950/50">
+        <div className="mb-2 flex items-center gap-2">
+          <VideoIcon size={20} />
+          <div className="font-bold text-purple-900 text-lg dark:text-purple-100">
+            {data.title}
+          </div>
+        </div>
+        <div className="flex items-center gap-4 text-sm">
+          <div className="rounded-full bg-white/50 px-3 py-1 font-medium text-purple-800 dark:bg-white/10 dark:text-purple-200">
+            {data.duration}
+          </div>
+          <div className="capitalize text-purple-700 dark:text-purple-300">
+            Concept: {data.concept.replace(/_/g, " ")}
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <div className="font-semibold text-slate-900 text-sm dark:text-slate-100">
+          Video Scenes ({data.scenes.length} total)
+        </div>
+        {data.scenes.map((scene) => (
+          <div
+            className="rounded-lg border border-indigo-200 bg-white p-3 dark:border-indigo-800 dark:bg-slate-900/50"
+            key={scene.scene}
+          >
+            <div className="mb-2 flex items-center justify-between">
+              <div className="font-semibold text-indigo-700 text-sm dark:text-indigo-300">
+                Scene {scene.scene}
+              </div>
+              <div className="rounded-full bg-indigo-100 px-2 py-0.5 text-indigo-700 text-xs dark:bg-indigo-900/50 dark:text-indigo-300">
+                {scene.duration}
+              </div>
+            </div>
+
+            <div className="mb-2 space-y-2 text-xs">
+              <div>
+                <div className="mb-1 font-medium text-slate-700 dark:text-slate-300">
+                  🎙️ Narration:
+                </div>
+                <div className="text-slate-600 dark:text-slate-400">
+                  {scene.narration}
+                </div>
+              </div>
+
+              <div>
+                <div className="mb-1 font-medium text-slate-700 dark:text-slate-300">
+                  🎨 Visuals:
+                </div>
+                <div className="text-slate-600 dark:text-slate-400">
+                  {scene.visuals}
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded bg-blue-50 px-2 py-1 text-blue-800 text-xs dark:bg-blue-950/30 dark:text-blue-200">
+              💡 Key: {scene.key_concept}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="rounded-lg bg-green-50 p-3 dark:bg-green-950/30">
+        <div className="mb-1 font-semibold text-green-900 text-sm dark:text-green-100">
+          Summary
+        </div>
+        <div className="text-green-800 text-xs dark:text-green-200">
+          {data.summary}
+        </div>
+      </div>
+
+      <div className="rounded-lg bg-amber-50 p-3 dark:bg-amber-950/30">
+        <div className="mb-1 font-semibold text-amber-900 text-sm dark:text-amber-100">
+          Next Steps
+        </div>
+        <div className="text-amber-800 text-xs dark:text-amber-200">
+          {data.next_steps}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <div className="font-semibold text-slate-900 text-sm dark:text-slate-100">
+          Production Guidelines
+        </div>
+        <div className="grid grid-cols-1 gap-2 text-xs md:grid-cols-2">
+          <div className="rounded-lg bg-slate-50 p-2 dark:bg-slate-900/30">
+            <div className="mb-0.5 font-medium text-slate-900 dark:text-slate-100">
+              Style
+            </div>
+            <div className="text-slate-700 dark:text-slate-300">
+              {data.video_format_suggestions.style}
+            </div>
+          </div>
+          <div className="rounded-lg bg-slate-50 p-2 dark:bg-slate-900/30">
+            <div className="mb-0.5 font-medium text-slate-900 dark:text-slate-100">
+              Pacing
+            </div>
+            <div className="text-slate-700 dark:text-slate-300">
+              {data.video_format_suggestions.pacing}
+            </div>
+          </div>
+          <div className="rounded-lg bg-slate-50 p-2 dark:bg-slate-900/30">
+            <div className="mb-0.5 font-medium text-slate-900 dark:text-slate-100">
+              Visuals
+            </div>
+            <div className="text-slate-700 dark:text-slate-300">
+              {data.video_format_suggestions.visuals}
+            </div>
+          </div>
+          <div className="rounded-lg bg-slate-50 p-2 dark:bg-slate-900/30">
+            <div className="mb-0.5 font-medium text-slate-900 dark:text-slate-100">
+              Accessibility
+            </div>
+            <div className="text-slate-700 dark:text-slate-300">
+              {data.video_format_suggestions.accessibility}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-lg bg-slate-100 p-3 dark:bg-slate-800/30">
+        <div className="mb-1 font-medium text-slate-900 text-xs dark:text-slate-100">
+          📝 Production Notes
+        </div>
+        <div className="text-slate-700 text-xs dark:text-slate-300">
+          {data.production_notes}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function AntClock({
   antClockResult,
 }: {
@@ -411,6 +591,9 @@ export function AntClock({
         )}
         {isCurvatureWalkResult(antClockResult) && (
           <CurvatureWalkDisplay data={antClockResult} />
+        )}
+        {isVideoScriptResult(antClockResult) && (
+          <VideoScriptDisplay data={antClockResult} />
         )}
       </div>
     </div>
