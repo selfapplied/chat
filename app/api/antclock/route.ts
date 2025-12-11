@@ -48,6 +48,10 @@ export async function GET() {
     const healthResponse = await fetch(`${ANTCLOCK_API_URL}/health`);
     const metricsResponse = await fetch(`${ANTCLOCK_API_URL}/metrics`);
 
+    if (!healthResponse.ok || !metricsResponse.ok) {
+      throw new Error('AntClock service returned error status');
+    }
+
     const health = await healthResponse.json();
     const metrics = await metricsResponse.json();
 

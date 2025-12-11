@@ -8,6 +8,8 @@ interface AntClockStatus {
   coherenceScore?: number;
 }
 
+const ANTCLOCK_API_URL = process.env.NEXT_PUBLIC_ANTCLOCK_API_URL || 'http://localhost:5000';
+
 export function AntClockBadge() {
   const [status, setStatus] = useState<AntClockStatus>({
     active: false,
@@ -18,7 +20,7 @@ export function AntClockBadge() {
     // Check AntClock service status
     const checkStatus = async () => {
       try {
-        const response = await fetch('http://localhost:5000/health');
+        const response = await fetch(`${ANTCLOCK_API_URL}/health`);
         if (response.ok) {
           const data = await response.json();
           setStatus({

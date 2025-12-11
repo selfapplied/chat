@@ -89,5 +89,7 @@ def get_metrics():
     })
 
 if __name__ == '__main__':
+    import os
+    debug_mode = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
     logger.info("Starting AntClock Intelligence API on port 5000")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode)

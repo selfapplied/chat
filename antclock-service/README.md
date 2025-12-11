@@ -93,6 +93,12 @@ python3 api.py
 
 The service will run on `http://localhost:5000`.
 
+**Debug Mode:**
+By default, the Flask app runs with debug mode disabled for security. To enable debug mode for development:
+```bash
+FLASK_DEBUG=true python3 api.py
+```
+
 ## Integration with Next.js
 
 The Next.js application includes:
