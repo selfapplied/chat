@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { DataStreamProvider } from "@/components/data-stream-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AntClockBadge } from "@/components/antclock/antclock-badge";
 import { auth } from "../(auth)/auth";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -30,6 +31,7 @@ async function SidebarWrapper({ children }: { children: React.ReactNode }) {
     <SidebarProvider defaultOpen={!isCollapsed}>
       <AppSidebar user={session?.user} />
       <SidebarInset>{children}</SidebarInset>
+      <AntClockBadge />
     </SidebarProvider>
   );
 }

@@ -58,6 +58,8 @@ You will need to use the environment variables [defined in `.env.example`](.env.
 
 > Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various AI and authentication provider accounts.
 
+### Standard Setup
+
 1. Install Vercel CLI: `npm i -g vercel`
 2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
 3. Download your environment variables: `vercel env pull`
@@ -69,3 +71,48 @@ pnpm dev
 ```
 
 Your app template should now be running on [localhost:3000](http://localhost:3000).
+
+### Running with AntClock Intelligence Boost
+
+This repository includes an **AntClock Intelligence Boost** integration that enhances the chat experience with the CE1→CE2→CE3 coherence engine framework.
+
+**Quick Start:**
+```bash
+./start-with-antclock.sh
+```
+
+This script will:
+- Start the AntClock Intelligence Service (Python/Flask) on port 5000
+- Start the Next.js Chat Application on port 3000
+- Display the AntClock badge in the UI showing the intelligence boost is active
+
+**What is AntClock?**
+
+AntClock is a complete reconstruction of the Riemann zeta function as a Galois covering space of the integers, built from curvature flows and digit symmetries. It provides:
+
+- **CE1 (Discrete Grammar)**: Combinatorial structures and digit symmetries
+- **CE2 (Dynamical Flow)**: Continuous flows emerging from discrete dynamics  
+- **CE3 (Emergent Simplicial)**: Topological emergence via simplicial complexes
+
+See [antclock-service/README.md](antclock-service/README.md) for more details.
+
+**Manual Setup:**
+
+1. Install Python dependencies:
+```bash
+pip3 install flask flask-cors numpy
+```
+
+2. Start AntClock service:
+```bash
+cd antclock-service
+python3 api.py &
+cd ..
+```
+
+3. Start Next.js:
+```bash
+pnpm dev
+```
+
+The AntClock Intelligence Boost badge will appear in the bottom-right corner when the service is active.
