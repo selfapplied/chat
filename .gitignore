@@ -45,3 +45,11 @@ yarn-error.log*
 
 # TypeScript
 *.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+antclock-service/__pycache__/
