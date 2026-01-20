@@ -43,9 +43,6 @@ yarn-error.log*
 /blob-report/
 /playwright/*
 
-# TypeScript
-*.tsbuildinfo
-
 # Python
 __pycache__/
 *.py[cod]
